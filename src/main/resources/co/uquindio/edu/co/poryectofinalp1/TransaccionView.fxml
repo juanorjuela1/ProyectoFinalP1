@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.effect.Blend?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/23.0.1"
+            fx:controller="co.edu.uniquindio.poo.ViewController.TransaccionViewController"
+            prefWidth="600.0" prefHeight="700.0"
+            style="-fx-background-color: #0A3D62; -fx-border-color: #F4D03F; -fx-border-width: 4px;">
+    <center>
+        <VBox alignment="CENTER" spacing="15">
+            <Label text="Transacción" style="-fx-text-fill: white;">
+                <font><Font name="System Bold" size="50.0" /></font>
+                <effect><Blend /></effect>
+            </Label>
+
+            <Button text="Ver Cuentas Disponibles" onAction="#mostrarCuentas" 
+                    style="-fx-background-color: #2ECC71; -fx-text-fill: white;">
+                <font><Font size="14.0" /></font>
+            </Button>
+
+            <ListView fx:id="listaCuentas" prefHeight="200.0" visible="false" managed="false" />
+
+            <TextField fx:id="cuentaOrigenField" promptText="Cuenta Origen" />
+            <TextField fx:id="cuentaDestinoField" promptText="Cuenta Destino (solo para transferencias)" />
+            <TextField fx:id="montoField" promptText="Monto" />
+
+            <HBox spacing="10" alignment="CENTER">
+                <Button text="Realizar Depósito" onAction="#realizarDeposito" 
+                        style="-fx-background-color: #3498DB; -fx-text-fill: white;">
+                    <font><Font size="14.0" /></font>
+                </Button>
+                <Button text="Realizar Retiro" onAction="#realizarRetiro"
+                        style="-fx-background-color: #E74C3C; -fx-text-fill: white;">
+                    <font><Font size="14.0" /></font>
+                </Button>
+                <Button text="Realizar Transferencia" onAction="#realizarTransferencia"
+                        style="-fx-background-color: #F39C12; -fx-text-fill: white;">
+                    <font><Font size="14.0" /></font>
+                </Button>
+            </HBox>
+
+            <Button text="Volver al Menú Principal" onAction="#volverAlMenu"
+                    style="-fx-background-color: #C0392B; -fx-text-fill: white;">
+                <font><Font size="14.0" /></font>
+            </Button>
+        </VBox>
+    </center>
+</BorderPane>

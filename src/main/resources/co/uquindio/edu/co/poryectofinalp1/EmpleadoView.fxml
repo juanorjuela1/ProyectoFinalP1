@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/17.0.2"
+            fx:controller="co.edu.uniquindio.poo.ViewController.EmpleadoViewController"
+            prefWidth="500.0" prefHeight="600.0"
+            style="-fx-background-color: #0A3D62; -fx-border-color: #F4D03F; -fx-border-width: 4px;">
+    <center>
+        <VBox alignment="CENTER" spacing="15">
+            <Label text="Gestión de Empleados" style="-fx-text-fill: white;">
+                <font>
+                    <Font name="System Bold" size="24.0"/>
+                </font>
+            </Label>
+
+            <TextField fx:id="nombreField" promptText="Nombre"/>
+            <TextField fx:id="cedulaField" promptText="Cédula"/>
+            <TextField fx:id="salarioField" promptText="Salario"/>
+
+            <HBox spacing="10" alignment="CENTER">
+                <Button text="Registrar Empleado" onAction="#registrarEmpleado"/>
+                <Button text="Buscar Empleado" onAction="#buscarEmpleado"/>
+                <Button text="Actualizar Empleado" onAction="#actualizarEmpleado"/>
+            </HBox>
+
+            <TableView fx:id="tablaEmpleados" VBox.vgrow="ALWAYS">
+                <columns>
+                    <TableColumn fx:id="nombreColumn" text="Nombre"/>
+                    <TableColumn fx:id="cedulaColumn" text="Cédula"/>
+                    <TableColumn fx:id="salarioColumn" text="Salario"/>
+                </columns>
+            </TableView>
+        </VBox>
+    </center>
+</BorderPane>
