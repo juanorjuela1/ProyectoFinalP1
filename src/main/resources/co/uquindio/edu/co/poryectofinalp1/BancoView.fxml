@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="700.0" prefWidth="600.0" style="-fx-background-color: #0A3D62;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="co.edu.uniquindio.poo.ViewController.BancoViewController">
+<BorderPane prefHeight="700.0" prefWidth="600.0" style="-fx-background-color: #0A3D62;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="co.uquindio.edu.co.poryectofinalp1.Controller.BancoController">
     <center>
         <VBox alignment="CENTER" spacing="20" style="-fx-border-color: yellow; -fx-border-width: 4px;">
             <Label style="-fx-text-fill: #28B463;" text="BancoUQ">
