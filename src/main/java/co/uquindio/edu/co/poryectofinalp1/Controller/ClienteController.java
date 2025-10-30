@@ -32,7 +32,7 @@ public class ClienteController {
     private Button btnCancelar;
 
     @FXML
-    private ListView<?> listaClientes;
+    private ListView<Cliente> listaClientes;
 
     private ListClientes lista;
 
@@ -87,6 +87,7 @@ public class ClienteController {
             nombreField.clear();
             cedulaField.clear();
             saldoInicialField.clear();
+            listaClientes.getItems().add(cliente);
 
         } catch (NumberFormatException e) {
             mostrarAlerta("Error", "El saldo debe ser un valor numerico valido", Alert.AlertType.ERROR);
