@@ -96,7 +96,7 @@ public class ClienteController {
     private void volverAlMenu ()throws IOException {
 
         Parent inicio;
-        FXMLLoader loader = new FXMLLoader(HelloApplication.class.getResource("/co/uquindio/edu/co/proyectofinalp1/BancoView.fxml"));
+        FXMLLoader loader = new FXMLLoader(HelloApplication.class.getResource("/co/uquindio/edu/co/poryectofinalp1/BancoView.fxml"));
         inicio = loader.load();
         HelloApplication.getPrimaryStage().getScene().setRoot(inicio);
 
