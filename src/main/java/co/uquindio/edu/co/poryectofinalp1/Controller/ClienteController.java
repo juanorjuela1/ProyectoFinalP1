@@ -84,13 +84,14 @@ public class ClienteController {
             Cliente cliente = new Cliente(nombre, cedula, saldo);
             lista.addCliente(cliente);
             mostrarAlerta("Éxito", "cliente registrado correctamente", Alert.AlertType.INFORMATION);
+            nombreField.clear();
+            cedulaField.clear();
+            saldoInicialField.clear();
 
         } catch (NumberFormatException e) {
             mostrarAlerta("Error", "El saldo debe ser un valor numerico valido", Alert.AlertType.ERROR);
         }
-        nombreField.clear();
-        cedulaField.clear();
-        saldoInicialField.clear();
+
     }
     @FXML
     private void volverAlMenu ()throws IOException {

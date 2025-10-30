@@ -11,8 +11,8 @@ public class HelloApplication extends Application {
     private static Stage primaryStage;
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("co/uquindio/edu/co/poryectofinalp1/ClienteView.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 320, 240);
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("/co/uquindio/edu/co/poryectofinalp1/ClienteView.fxml"));
+        Scene scene = new Scene(fxmlLoader.load(), 900, 700);
         stage.setTitle("Registro de Cliente");
         stage.setScene(scene);
         stage.show();
