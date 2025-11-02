@@ -2,7 +2,7 @@ package co.uquindio.edu.co.poryectofinalp1.Controller;
 
 import co.uquindio.edu.co.poryectofinalp1.HelloApplication;
 import co.uquindio.edu.co.poryectofinalp1.Model.Cliente;
-import co.uquindio.edu.co.poryectofinalp1.Repositorio.ListClientes;
+import co.uquindio.edu.co.poryectofinalp1.Repositorio.ListCliente;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -12,7 +12,6 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 
 import java.io.IOException;
-
 
 public class ClienteController {
 
@@ -34,10 +33,12 @@ public class ClienteController {
     @FXML
     private ListView<Cliente> listaClientes;
 
-    private ListClientes lista;
+    private ListCliente lista;
 
     public void initialize() {
-        lista = ListClientes.getIsntancia();
+        lista = ListCliente.getInstance();
+        // Cargar clientes existentes en la lista
+        listaClientes.getItems().addAll(lista.getClientes());
     }
 
     /**
@@ -49,7 +50,7 @@ public class ClienteController {
             return false;
         }
         if (cedulaField.getText().trim().isEmpty()) {
-            mostrarAlerta("Error de validación", "La cedula es obligatoria", Alert.AlertType.WARNING);
+            mostrarAlerta("Error de validación", "La cédula es obligatoria", Alert.AlertType.WARNING);
             return false;
         }
         if (saldoInicialField.getText().trim().isEmpty()) {
@@ -71,44 +72,65 @@ public class ClienteController {
     }
 
     @FXML
-    private void onCrearCuenta () {
+    private void onCrearCuenta() {
         if (!validarCampos()) {
             return;
         }
         try {
-
             String nombre = nombreField.getText().trim();
             String cedula = cedulaField.getText().trim();
             double saldo = Double.parseDouble(saldoInicialField.getText().trim());
 
+            // Verificar si ya existe un cliente con esa cédula
+            Cliente clienteExistente = lista.buscarClientePorCedula(cedula);
+            if (clienteExistente != null) {
+                mostrarAlerta("Error",
+                        "Ya existe una cuenta con esa cédula\n" +
+                                "Número de cuenta: " + clienteExistente.getNumeroCuenta(),
+                        Alert.AlertType.ERROR);
+                return;
+            }
+
+            // Validar que el saldo inicial sea positivo
+            if (saldo < 0) {
+                mostrarAlerta("Error", "El saldo inicial no puede ser negativo", Alert.AlertType.ERROR);
+                return;
+            }
+
             Cliente cliente = new Cliente(nombre, cedula, saldo);
             lista.addCliente(cliente);
-            mostrarAlerta("Éxito", "cliente registrado correctamente", Alert.AlertType.INFORMATION);
+
+            // Mostrar mensaje con el número de cuenta generado
+            mostrarAlerta("¡Cuenta creada exitosamente!",
+                    "Se ha generado la cuenta N° " + cliente.getNumeroCuenta() + "\n" +
+                            "Titular: " + cliente.getNombre() + "\n" +
+                            "Cédula: " + cliente.getCedula() + "\n" +
+                            "Saldo inicial: $" + String.format("%.2f", cliente.getSaldo()),
+                    Alert.AlertType.INFORMATION);
+
+            // Limpiar campos
             nombreField.clear();
             cedulaField.clear();
             saldoInicialField.clear();
+
+            // Agregar a la lista visual
             listaClientes.getItems().add(cliente);
 
         } catch (NumberFormatException e) {
-            mostrarAlerta("Error", "El saldo debe ser un valor numerico valido", Alert.AlertType.ERROR);
+            mostrarAlerta("Error", "El saldo debe ser un valor numérico válido", Alert.AlertType.ERROR);
         }
-
     }
-    @FXML
-    private void volverAlMenu ()throws IOException {
 
+    @FXML
+    private void volverAlMenu() throws IOException {
         Parent inicio;
         FXMLLoader loader = new FXMLLoader(HelloApplication.class.getResource("/co/uquindio/edu/co/poryectofinalp1/BancoView.fxml"));
         inicio = loader.load();
         HelloApplication.getPrimaryStage().getScene().setRoot(inicio);
-
     }
+
     @FXML
-    private void onCancelar ()throws IOException {
+    private void onCancelar() throws IOException {
         volverAlMenu();
     }
-
-
-
 }
-
