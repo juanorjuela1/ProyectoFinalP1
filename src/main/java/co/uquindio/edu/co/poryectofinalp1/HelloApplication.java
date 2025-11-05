@@ -12,9 +12,8 @@ public class HelloApplication extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        primaryStage = stage;  // Importante: guardar la referencia del Stage
-
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("/co/uquindio/edu/co/poryectofinalp1/BancoView.fxml"));
+        primaryStage = stage;
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("/co/uquindio/edu/co/poryectofinalp1/LoginView.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 900, 700);
         stage.setTitle("BancoUQ - Sistema de Gestión Bancaria");
         stage.setScene(scene);

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane prefHeight="700.0" prefWidth="600.0"
+            style="-fx-background-color: #0A3D62;"
+            xmlns="http://javafx.com/javafx/23.0.1"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="co.uquindio.edu.co.poryectofinalp1.Controller.LoginController">
+    <center>
+        <VBox alignment="CENTER" spacing="25" style="-fx-border-color: #F4D03F; -fx-border-width: 4px; -fx-padding: 50;">
+
+            <Label text="BancoUQ" style="-fx-text-fill: #28B463;">
+                <font>
+                    <Font name="Arial Black" size="50.0"/>
+                </font>
+                <effect>
+                    <DropShadow/>
+                </effect>
+            </Label>
+
+            <Label text="Inicio de Sesión" style="-fx-text-fill: white;">
+                <font>
+                    <Font name="System Bold" size="28.0"/>
+                </font>
+            </Label>
+
+
+
+            <VBox spacing="15" alignment="CENTER" style="-fx-background-color: rgba(255,255,255,0.1); -fx-padding: 30;">
+                <TextField fx:id="usernameField" promptText="Usuario" style="-fx-pref-width: 300;">
+                    <font>
+                        <Font size="14.0"/>
+                    </font>
+                </TextField>
+
+                <PasswordField fx:id="passwordField" promptText="Contraseña" style="-fx-pref-width: 300;">
+                    <font>
+                        <Font size="14.0"/>
+                    </font>
+                </PasswordField>
+
+                <HBox spacing="15" alignment="CENTER">
+                    <Button onAction="#onLogin"
+                            style="-fx-background-color: #28B463; -fx-text-fill: white; -fx-pref-width: 130;"
+                            text="Ingresar">
+                        <font>
+                            <Font size="16.0"/>
+                        </font>
+                        <effect>
+                            <DropShadow/>
+                        </effect>
+                    </Button>
+
+                    <Button onAction="#onSalir"
+                            style="-fx-background-color: #C0392B; -fx-text-fill: white; -fx-pref-width: 130;"
+                            text="Salir">
+                        <font>
+                            <Font size="16.0"/>
+                        </font>
+                        <effect>
+                            <DropShadow/>
+                        </effect>
+                    </Button>
+                </HBox>
+            </VBox>
+
+            <VBox spacing="5" alignment="CENTER">
+                <Label text="Usuarios de prueba:" style="-fx-text-fill: #F4D03F;">
+                    <font>
+                        <Font size="12.0" />
+                    </font>
+                </Label>
+                <Label text="Admin: usuario='admin' contraseña='admin123'" style="-fx-text-fill: white;">
+                    <font>
+                        <Font size="11.0"/>
+                    </font>
+                </Label>
+                <Label text="Cliente: usuario='cliente' contraseña='cliente123'" style="-fx-text-fill: white;">
+                    <font>
+                        <Font size="11.0"/>
+                    </font>
+                </Label>
+            </VBox>
+
+        </VBox>
+    </center>
+</BorderPane>

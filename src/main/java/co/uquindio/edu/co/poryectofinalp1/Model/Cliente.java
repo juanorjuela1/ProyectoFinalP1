@@ -21,7 +21,7 @@ public class Cliente {
      */
     private String generarNumeroCuenta() {
         contadorCuentas++;
-        return String.format("%04d", contadorCuentas); // 4 dígitos: 0001, 0002, 0003...
+        return String.format("%04d", contadorCuentas);
     }
 
     public String getNumeroCuenta() {
