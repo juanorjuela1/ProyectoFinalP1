@@ -17,6 +17,7 @@ public class SesionUsuario {
 
     public void iniciarSesion(Usuario usuario) {
         this.usuarioActual = usuario;
+        System.out.println("Sesión iniciada para: " + usuario.getUsername() + " - Rol: " + usuario.getTipo());
     }
 
     public void cerrarSesion() {
@@ -39,5 +40,10 @@ public class SesionUsuario {
     public boolean esCliente() {
         return usuarioActual != null &&
                 usuarioActual.getTipo() == Usuario.TipoUsuario.CLIENTE;
+    }
+
+    public boolean esCajero() {
+        return usuarioActual != null &&
+                usuarioActual.getTipo() == Usuario.TipoUsuario.CAJERO;
     }
 }

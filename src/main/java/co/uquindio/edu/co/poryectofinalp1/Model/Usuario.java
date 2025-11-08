@@ -39,6 +39,7 @@ public class Usuario {
 
     public enum TipoUsuario {
         ADMIN,
-        CLIENTE
+        CLIENTE,
+        CAJERO
     }
 }

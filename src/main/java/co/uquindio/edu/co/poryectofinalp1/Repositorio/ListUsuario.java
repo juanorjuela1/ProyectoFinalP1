@@ -14,6 +14,13 @@ public class ListUsuario {
         // Crear usuarios predeterminados
         usuarios.add(new Usuario("admin", "admin123", Usuario.TipoUsuario.ADMIN));
         usuarios.add(new Usuario("cliente", "cliente123", Usuario.TipoUsuario.CLIENTE));
+        usuarios.add(new Usuario("cajero", "cajero123", Usuario.TipoUsuario.CAJERO));
+
+        // Debug: imprimir usuarios creados
+        System.out.println("=== USUARIOS REGISTRADOS ===");
+        for (Usuario u : usuarios) {
+            System.out.println("Usuario: " + u.getUsername() + " - Tipo: " + u.getTipo());
+        }
     }
 
     public static ListUsuario getInstancia() {
@@ -24,11 +31,19 @@ public class ListUsuario {
     }
 
     public Usuario autenticar(String username, String password) {
-        return usuarios.stream()
+        System.out.println("Intentando autenticar: " + username);
+        Usuario user = usuarios.stream()
                 .filter(u -> u.getUsername().equals(username) &&
                         u.getPassword().equals(password))
                 .findFirst()
                 .orElse(null);
+
+        if (user != null) {
+            System.out.println("✓ Usuario autenticado: " + user.getUsername() + " - Tipo: " + user.getTipo());
+        } else {
+            System.out.println("✗ Autenticación fallida");
+        }
+        return user;
     }
 
     public void agregarUsuario(Usuario usuario) {

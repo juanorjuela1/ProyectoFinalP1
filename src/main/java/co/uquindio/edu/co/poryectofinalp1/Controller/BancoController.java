@@ -44,20 +44,38 @@ public class BancoController {
         private void configurarVistaPorRol() {
                 if (sesion.getUsuarioActual() != null) {
                         String nombreUsuario = sesion.getUsuarioActual().getUsername();
-                        lblBienvenida.setText("Bienvenido: " + nombreUsuario);
+                        String tipoUsuario = sesion.getUsuarioActual().getTipo().toString();
+                        lblBienvenida.setText("Bienvenido: " + nombreUsuario + " (" + tipoUsuario + ")");
+
+                        System.out.println("Configurando vista para rol: " + tipoUsuario);
 
                         if (sesion.esCliente()) {
                                 // Los clientes solo ven Transferencias
+                                System.out.println("Configurando vista de CLIENTE");
                                 btnAcceder.setVisible(false);
                                 btnAcceder.setManaged(false);
                                 btnCrearCuenta.setVisible(false);
                                 btnCrearCuenta.setManaged(false);
+                                btnTransferencia.setVisible(true);
+                                btnTransferencia.setManaged(true);
                         } else if (sesion.esAdmin()) {
                                 // Los admins ven todas las funciones
+                                System.out.println("Configurando vista de ADMIN");
                                 btnAcceder.setVisible(true);
                                 btnAcceder.setManaged(true);
                                 btnCrearCuenta.setVisible(true);
                                 btnCrearCuenta.setManaged(true);
+                                btnTransferencia.setVisible(true);
+                                btnTransferencia.setManaged(true);
+                        } else if (sesion.esCajero()) {
+                                // Los cajeros solo ven Crear Cuenta y Transacciones
+                                System.out.println("Configurando vista de CAJERO");
+                                btnAcceder.setVisible(false);
+                                btnAcceder.setManaged(false);
+                                btnCrearCuenta.setVisible(true);
+                                btnCrearCuenta.setManaged(true);
+                                btnTransferencia.setVisible(true);
+                                btnTransferencia.setManaged(true);
                         }
                 }
         }

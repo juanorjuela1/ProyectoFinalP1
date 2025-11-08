@@ -85,6 +85,11 @@
                         <Font size="11.0"/>
                     </font>
                 </Label>
+                <Label text="Cajero: usuario='cajero' contraseña='cajero123'" style="-fx-text-fill: white;">
+                    <font>
+                        <Font size="11.0"/>
+                    </font>
+                </Label>
             </VBox>
 
         </VBox>
