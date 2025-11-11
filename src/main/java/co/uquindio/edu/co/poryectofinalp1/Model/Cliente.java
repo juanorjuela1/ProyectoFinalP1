@@ -1,42 +1,76 @@
 package co.uquindio.edu.co.poryectofinalp1.Model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
- * Cliente - HERENCIA de Persona
- * Representa a una persona que TIENE una cuenta bancaria (COMPOSICIÓN)
+ * Cliente - HERENCIA de Persona + COMPOSICIÓN con CuentaBancaria
+ * Representa a una persona que TIENE una o más cuentas bancarias
  * Aplica: HERENCIA + COMPOSICIÓN + POLIMORFISMO + ENCAPSULAMIENTO
  */
 public class Cliente extends Persona {
-    private String numeroCuenta;
-    private double saldo;
+    private List<CuentaBancaria> cuentas;
     private String fechaRegistro;
     private boolean activo;
-    private static int contadorCuentas = 0;
-
-    public Cliente() {
-        super();
-        this.activo = true;
-    }
 
     public Cliente(String nombre, String cedula, double saldo) {
-        super(nombre, cedula);
-        this.numeroCuenta = generarNumeroCuenta();
-        this.saldo = saldo;
+        super();
+        this.cuentas = new ArrayList<>();
         this.activo = true;
     }
 
-    public Cliente(String nombre, String cedula, String telefono, String email, double saldo) {
+    public Cliente(String nombre, String cedula) {
+        super(nombre, cedula);
+        this.cuentas = new ArrayList<>();
+        this.activo = true;
+    }
+
+    public Cliente(String nombre, String cedula, String telefono, String email) {
         super(nombre, cedula, telefono, email);
-        this.numeroCuenta = generarNumeroCuenta();
-        this.saldo = saldo;
+        this.cuentas = new ArrayList<>();
         this.activo = true;
     }
 
     /**
-     * Genera un número de cuenta único automáticamente
+     * COMPOSICIÓN - Agrega una cuenta bancaria al cliente
      */
-    private String generarNumeroCuenta() {
-        contadorCuentas++;
-        return String.format("%04d", contadorCuentas);
+    public void agregarCuenta(CuentaBancaria cuenta) {
+        if (cuenta != null && !cuentas.contains(cuenta)) {
+            cuentas.add(cuenta);
+        }
+    }
+
+    /**
+     * COMPOSICIÓN - Elimina una cuenta bancaria
+     */
+    public boolean eliminarCuenta(String numeroCuenta) {
+        return cuentas.removeIf(c -> c.getNumeroCuenta().equals(numeroCuenta));
+    }
+
+    /**
+     * COMPOSICIÓN - Busca una cuenta por su número
+     */
+    public CuentaBancaria buscarCuenta(String numeroCuenta) {
+        return cuentas.stream()
+                .filter(c -> c.getNumeroCuenta().equals(numeroCuenta))
+                .findFirst()
+                .orElse(null);
+    }
+
+    /**
+     * Obtiene la cuenta principal (primera cuenta)
+     */
+    public CuentaBancaria getCuentaPrincipal() {
+        return cuentas.isEmpty() ? null : cuentas.get(0);
+    }
+
+    /**
+     * Calcula el saldo total de todas las cuentas
+     */
+    public double getSaldoTotal() {
+        return cuentas.stream()
+                .mapToDouble(CuentaBancaria::consultarSaldo)
+                .sum();
     }
 
     /**
@@ -44,8 +78,8 @@ public class Cliente extends Persona {
      */
     @Override
     public String obtenerInformacion() {
-        return "Cliente: " + nombre + " | CC: " + cedula +
-                " | Cuenta: " + numeroCuenta;
+        return String.format("Cliente: %s | CC: %s | Cuentas: %d | Saldo Total: $%.2f",
+                nombre, cedula, cuentas.size(), getSaldoTotal());
     }
 
     /**
@@ -56,40 +90,38 @@ public class Cliente extends Persona {
         return "CLIENTE";
     }
 
-    // Métodos específicos de Cliente
-    public double consultarSaldo() {
-        return this.saldo;
-    }
-
-    public void depositar(double monto) {
-        if (monto > 0) {
-            this.saldo += monto;
+    /**
+     * Genera un reporte de todas las cuentas del cliente
+     */
+    public String generarReporteCuentas() {
+        if (cuentas.isEmpty()) {
+            return "El cliente no tiene cuentas registradas";
         }
-    }
 
-    public boolean retirar(double monto) {
-        if (monto > 0 && this.saldo >= monto) {
-            this.saldo -= monto;
-            return true;
+        StringBuilder reporte = new StringBuilder();
+        reporte.append("=== REPORTE DE CUENTAS ===\n");
+        reporte.append(String.format("Cliente: %s\n", nombre));
+        reporte.append(String.format("Cédula: %s\n", cedula));
+        reporte.append(String.format("Total de Cuentas: %d\n\n", cuentas.size()));
+
+        for (int i = 0; i < cuentas.size(); i++) {
+            CuentaBancaria cuenta = cuentas.get(i);
+            reporte.append(String.format("Cuenta #%d:\n", i + 1));
+            reporte.append(cuenta.generarReporteDetallado());
+            reporte.append("\n\n");
         }
-        return false;
+
+        reporte.append(String.format("SALDO TOTAL: $%.2f\n", getSaldoTotal()));
+        return reporte.toString();
     }
 
-    // Getters y Setters específicos
-    public String getNumeroCuenta() {
-        return numeroCuenta;
+    // Getters y Setters
+    public List<CuentaBancaria> getCuentas() {
+        return cuentas;
     }
 
-    public void setNumeroCuenta(String numeroCuenta) {
-        this.numeroCuenta = numeroCuenta;
-    }
-
-    public double getSaldo() {
-        return saldo;
-    }
-
-    public void setSaldo(double saldo) {
-        this.saldo = saldo;
+    public void setCuentas(List<CuentaBancaria> cuentas) {
+        this.cuentas = cuentas;
     }
 
     public String getFechaRegistro() {
@@ -108,9 +140,25 @@ public class Cliente extends Persona {
         this.activo = activo;
     }
 
+    public String getNumeroCuenta() {
+        return getCuentaPrincipal() != null ? getCuentaPrincipal().getNumeroCuenta() : "SIN CUENTA";
+    }
+
+    public void setSaldo(double saldo) {
+        if (getCuentaPrincipal() != null) {
+            getCuentaPrincipal().setSaldo(saldo);
+        }
+    }
+
+    public double getSaldo() {
+        return getSaldoTotal();
+    }
+
     @Override
     public String toString() {
-        return "Cuenta: " + numeroCuenta + " | " +
-                nombre + " | CC: " + cedula + " | Saldo: " + String.format("$%.2f", saldo);
+        return String.format("%s | %s | Cuentas: %d | Saldo: $%.2f",
+                nombre, cedula, cuentas.size(), getSaldoTotal());
     }
+
+
 }

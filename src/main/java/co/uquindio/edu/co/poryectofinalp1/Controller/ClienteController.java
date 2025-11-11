@@ -86,7 +86,7 @@ public class ClienteController {
             if (clienteExistente != null) {
                 mostrarAlerta("Error",
                         "Ya existe una cuenta con esa cédula\n" +
-                                "Número de cuenta: " + clienteExistente.getNumeroCuenta(),
+                                "Número de cuenta: " + clienteExistente.getCuentas(),
                         Alert.AlertType.ERROR);
                 return;
             }
@@ -102,10 +102,10 @@ public class ClienteController {
 
             // Mostrar mensaje con el número de cuenta generado
             mostrarAlerta("¡Cuenta creada exitosamente!",
-                    "Se ha generado la cuenta N° " + cliente.getNumeroCuenta() + "\n" +
+                    "Se ha generado la cuenta N° " + cliente.getCuentas() + "\n" +
                             "Titular: " + cliente.getNombre() + "\n" +
                             "Cédula: " + cliente.getCedula() + "\n" +
-                            "Saldo inicial: $" + String.format("%.2f", cliente.getSaldo()),
+                            "Saldo inicial: $" + String.format("%.2f", cliente.getSaldoTotal()),
                     Alert.AlertType.INFORMATION);
 
             // Limpiar campos

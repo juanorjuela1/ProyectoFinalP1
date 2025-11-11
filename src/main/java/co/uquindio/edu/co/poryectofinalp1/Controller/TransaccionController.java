@@ -102,7 +102,7 @@ public class TransaccionController {
             }
 
             // Realizar depósito
-            cliente.setSaldo(cliente.getSaldo() + monto);
+            cliente.setSaldo(cliente.getSaldoTotal() + monto);
 
             // Registrar transacción
             Transaccion transaccion = new Transaccion("DEPOSITO", numeroCuentaOrigen, monto);
