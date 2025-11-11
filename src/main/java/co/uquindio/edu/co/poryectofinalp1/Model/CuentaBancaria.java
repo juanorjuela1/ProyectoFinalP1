@@ -99,7 +99,7 @@ public abstract class CuentaBancaria implements ITransaccionable, IReporteable {
      */
     @Override
     public String generarReporte() {
-        return String.format("Cuenta: %s | Tipo: %s | Titular: %s | Saldo: $%.2f",
+        return String.format(java.util.Locale.US, "Cuenta: %s | Tipo: %s | Titular: %s | Saldo: $%.2f",
                 numeroCuenta, getTipoCuenta(), titularNombre, saldo);
     }
 

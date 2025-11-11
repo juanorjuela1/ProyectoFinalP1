@@ -13,10 +13,15 @@ public class Cliente extends Persona {
     private String fechaRegistro;
     private boolean activo;
 
+    // En Cliente.java
     public Cliente(String nombre, String cedula, double saldo) {
-        super();
+        super(nombre, cedula);
         this.cuentas = new ArrayList<>();
         this.activo = true;
+
+        // ✅ Crear automáticamente una cuenta de ahorro con el saldo inicial
+        CuentaAhorro cuentaPrincipal = new CuentaAhorro(nombre, cedula, saldo);
+        this.cuentas.add(cuentaPrincipal);
     }
 
     public Cliente(String nombre, String cedula) {
@@ -156,8 +161,8 @@ public class Cliente extends Persona {
 
     @Override
     public String toString() {
-        return String.format("%s | %s | Cuentas: %d | Saldo: $%.2f",
-                nombre, cedula, cuentas.size(), getSaldoTotal());
+        return String.format("%s | Cédula: %s | Cuenta: %s",
+                nombre, cedula, getNumeroCuenta());
     }
 
 

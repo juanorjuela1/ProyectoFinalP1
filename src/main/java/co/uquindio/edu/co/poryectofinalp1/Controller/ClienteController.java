@@ -72,7 +72,7 @@ public class ClienteController {
     }
 
     @FXML
-    private void onCrearCuenta() {
+    private void onCrearCliente() {
         if (!validarCampos()) {
             return;
         }

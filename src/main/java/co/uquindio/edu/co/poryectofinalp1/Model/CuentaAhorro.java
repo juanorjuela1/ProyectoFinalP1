@@ -84,7 +84,7 @@ public class CuentaAhorro extends CuentaBancaria {
     @Override
     public String generarReporteDetallado() {
         return super.generarReporteDetallado() +
-                String.format("\nTasa de Interés: %.2f%%\nIntereses proyectados: $%.2f",
+                String.format(java.util.Locale.US, "\nTasa de Interés: %.2f%%\nIntereses proyectados: $%.2f",
                         tasaInteres * 100, calcularIntereses());
     }
 

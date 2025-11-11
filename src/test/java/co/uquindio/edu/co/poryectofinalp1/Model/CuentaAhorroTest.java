@@ -90,6 +90,7 @@ class CuentaAhorroTest {
     @Test
     void testGenerarReporte() {
         String reporte = cuenta.generarReporte();
+
         assertNotNull(reporte);
         assertTrue(reporte.contains("AHORRO"));
         assertTrue(reporte.contains("Juan Pérez"));

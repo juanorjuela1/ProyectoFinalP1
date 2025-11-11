@@ -105,7 +105,7 @@ public class BancoController {
         }
 
         @FXML
-        void onCrearCuenta(ActionEvent event) {
+        void onCrearCliente(ActionEvent event) {
                 try {
                         Parent clienteView;
                         FXMLLoader loader = new FXMLLoader(HelloApplication.class.getResource("/co/uquindio/edu/co/poryectofinalp1/ClienteView.fxml"));

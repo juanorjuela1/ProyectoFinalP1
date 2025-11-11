@@ -35,6 +35,8 @@ public class TransaccionController {
     public void initialize() {
         listaClientes = ListCliente.getInstance();
         listaTransacciones = ListTransaccion.getInstancia();
+
+        mostrarCuentas();
     }
 
     /**
@@ -162,8 +164,7 @@ public class TransaccionController {
             mostrarAlerta("Éxito",
                     "Retiro realizado correctamente\n" +
                             "Cuenta: " + cliente.getNumeroCuenta() + "\n" +
-                            "Titular: " + cliente.getNombre() + "\n" +
-                            "Nuevo saldo: $" + String.format("%.2f", cliente.getSaldo()),
+                            "Titular: " + cliente.getNombre() + "\n",
                     Alert.AlertType.INFORMATION);
 
             limpiarCampos();
