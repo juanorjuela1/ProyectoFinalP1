@@ -161,8 +161,12 @@ public class Cliente extends Persona {
 
     @Override
     public String toString() {
-        return String.format("%s | Cédula: %s | Cuenta: %s",
-                nombre, cedula, getNumeroCuenta());
+        CuentaBancaria cuentaPrincipal = getCuentaPrincipal();
+        String tipoCuenta = cuentaPrincipal != null ? cuentaPrincipal.getTipoCuenta() : "SIN CUENTA";
+        String numeroCuenta = cuentaPrincipal != null ? cuentaPrincipal.getNumeroCuenta() : "N/A";
+
+        return String.format("%s | Cédula: %s | Cuenta %s: %s",
+                nombre, cedula, tipoCuenta, numeroCuenta);
     }
 
 

@@ -1,15 +1,12 @@
 package co.uquindio.edu.co.poryectofinalp1.Controller;
 
 import co.uquindio.edu.co.poryectofinalp1.HelloApplication;
-import co.uquindio.edu.co.poryectofinalp1.Model.Cliente;
+import co.uquindio.edu.co.poryectofinalp1.Model.*;
 import co.uquindio.edu.co.poryectofinalp1.Repositorio.ListCliente;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 
 import java.io.IOException;
 
@@ -25,6 +22,9 @@ public class ClienteController {
     private TextField saldoInicialField;
 
     @FXML
+    private ComboBox<String> tipoCuentaCombo;
+
+    @FXML
     private Button btnCrearCuenta;
 
     @FXML
@@ -37,8 +37,9 @@ public class ClienteController {
 
     public void initialize() {
         lista = ListCliente.getInstance();
-        // Cargar clientes existentes en la lista
         listaClientes.getItems().addAll(lista.getClientes());
+
+        tipoCuentaCombo.getSelectionModel().selectFirst();
     }
 
     /**
@@ -80,13 +81,20 @@ public class ClienteController {
             String nombre = nombreField.getText().trim();
             String cedula = cedulaField.getText().trim();
             double saldo = Double.parseDouble(saldoInicialField.getText().trim());
+            String tipoCuenta = tipoCuentaCombo.getValue();
+
+            // Validar que se haya seleccionado un tipo de cuenta
+            if (tipoCuenta == null) {
+                mostrarAlerta("Error", "Debe seleccionar un tipo de cuenta", Alert.AlertType.WARNING);
+                return;
+            }
 
             // Verificar si ya existe un cliente con esa cédula
             Cliente clienteExistente = lista.buscarClientePorCedula(cedula);
             if (clienteExistente != null) {
                 mostrarAlerta("Error",
                         "Ya existe una cuenta con esa cédula\n" +
-                                "Número de cuenta: " + clienteExistente.getCuentas(),
+                                "Número de cuenta: " + clienteExistente.getNumeroCuenta(),
                         Alert.AlertType.ERROR);
                 return;
             }
@@ -97,24 +105,45 @@ public class ClienteController {
                 return;
             }
 
-            Cliente cliente = new Cliente(nombre, cedula, saldo);
+            // ✅ NUEVO: Crear el cliente y asignarle la cuenta según el tipo seleccionado
+            Cliente cliente = new Cliente(nombre, cedula);
+
+            CuentaBancaria cuenta;
+            switch (tipoCuenta) {
+                case "AHORRO":
+                    cuenta = new CuentaAhorro(nombre, cedula, saldo);
+                    break;
+                case "CORRIENTE":
+                    cuenta = new CuentaCorriente(nombre, cedula, saldo);
+                    break;
+                case "EMPRESARIAL":
+                    cuenta = new CuentaEmpresarial(nombre, cedula, saldo);
+                    break;
+                default:
+                    cuenta = new CuentaAhorro(nombre, cedula, saldo);
+            }
+
+            cliente.agregarCuenta(cuenta);
             lista.addCliente(cliente);
 
             // Mostrar mensaje con el número de cuenta generado
             mostrarAlerta("¡Cuenta creada exitosamente!",
-                    "Se ha generado la cuenta N° " + cliente.getCuentas() + "\n" +
+                    "Tipo de cuenta: " + tipoCuenta + "\n" +
+                            "Número de cuenta: " + cuenta.getNumeroCuenta() + "\n" +
                             "Titular: " + cliente.getNombre() + "\n" +
                             "Cédula: " + cliente.getCedula() + "\n" +
-                            "Saldo inicial: $" + String.format("%.2f", cliente.getSaldoTotal()),
+                            "Saldo inicial: $" + String.format("%.2f", cuenta.getSaldo()),
                     Alert.AlertType.INFORMATION);
 
             // Limpiar campos
             nombreField.clear();
             cedulaField.clear();
             saldoInicialField.clear();
+            tipoCuentaCombo.getSelectionModel().selectFirst();
 
-            // Agregar a la lista visual
-            listaClientes.getItems().add(cliente);
+            // Actualizar la lista visual
+            listaClientes.getItems().clear();
+            listaClientes.getItems().addAll(lista.getClientes());
 
         } catch (NumberFormatException e) {
             mostrarAlerta("Error", "El saldo debe ser un valor numérico válido", Alert.AlertType.ERROR);

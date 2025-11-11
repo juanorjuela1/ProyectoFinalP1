@@ -113,8 +113,7 @@ public class TransaccionController {
             mostrarAlerta("Éxito",
                     "Depósito realizado correctamente\n" +
                             "Cuenta: " + cliente.getNumeroCuenta() + "\n" +
-                            "Titular: " + cliente.getNombre() + "\n" +
-                            "Nuevo saldo: $" + String.format("%.2f", cliente.getSaldo()),
+                            "Titular: " + cliente.getNombre() + "\n" ,
                     Alert.AlertType.INFORMATION);
 
             limpiarCampos();
