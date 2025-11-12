@@ -3,10 +3,13 @@ package co.uquindio.edu.co.poryectofinalp1.Controller;
 import co.uquindio.edu.co.poryectofinalp1.HelloApplication;
 import co.uquindio.edu.co.poryectofinalp1.Model.*;
 import co.uquindio.edu.co.poryectofinalp1.Repositorio.ListCliente;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.io.IOException;
 
@@ -31,20 +34,44 @@ public class ClienteController {
     private Button btnCancelar;
 
     @FXML
-    private ListView<Cliente> listaClientes;
+    private TableView<Cliente> tablaClientes;
+
+    @FXML
+    private TableColumn<Cliente, String> nombreColumn;
+
+    @FXML
+    private TableColumn<Cliente, String> cedulaColumn;
+
+    @FXML
+    private TableColumn<Cliente, String> numeroCuentaColumn;
+
+    @FXML
+    private TableColumn<Cliente, String> saldoColumn;
 
     private ListCliente lista;
+    private ObservableList<Cliente> clientesObservable;
 
     public void initialize() {
         lista = ListCliente.getInstance();
-        listaClientes.getItems().addAll(lista.getClientes());
+        clientesObservable = FXCollections.observableArrayList(lista.getClientes());
 
+        // Configurar las columnas de la tabla
+        nombreColumn.setCellValueFactory(new PropertyValueFactory<>("nombre"));
+        cedulaColumn.setCellValueFactory(new PropertyValueFactory<>("cedula"));
+        numeroCuentaColumn.setCellValueFactory(new PropertyValueFactory<>("numeroCuenta"));
+
+        // Configurar columna de saldo con formato
+        saldoColumn.setCellValueFactory(cellData -> {
+            double saldo = cellData.getValue().getSaldo();
+            return new javafx.beans.property.SimpleStringProperty(
+                    String.format("$%.2f", saldo)
+            );
+        });
+
+        tablaClientes.setItems(clientesObservable);
         tipoCuentaCombo.getSelectionModel().selectFirst();
     }
 
-    /**
-     * Valida que los campos del formulario estén completos
-     */
     private boolean validarCampos() {
         if (nombreField.getText().trim().isEmpty()) {
             mostrarAlerta("Error de validación", "El nombre es obligatorio", Alert.AlertType.WARNING);
@@ -61,9 +88,6 @@ public class ClienteController {
         return true;
     }
 
-    /**
-     * Muestra una alerta al usuario
-     */
     private void mostrarAlerta(String titulo, String mensaje, Alert.AlertType tipo) {
         Alert alerta = new Alert(tipo);
         alerta.setTitle(titulo);
@@ -83,13 +107,11 @@ public class ClienteController {
             double saldo = Double.parseDouble(saldoInicialField.getText().trim());
             String tipoCuenta = tipoCuentaCombo.getValue();
 
-            // Validar que se haya seleccionado un tipo de cuenta
             if (tipoCuenta == null) {
                 mostrarAlerta("Error", "Debe seleccionar un tipo de cuenta", Alert.AlertType.WARNING);
                 return;
             }
 
-            // Verificar si ya existe un cliente con esa cédula
             Cliente clienteExistente = lista.buscarClientePorCedula(cedula);
             if (clienteExistente != null) {
                 mostrarAlerta("Error",
@@ -99,13 +121,11 @@ public class ClienteController {
                 return;
             }
 
-            // Validar que el saldo inicial sea positivo
             if (saldo < 0) {
                 mostrarAlerta("Error", "El saldo inicial no puede ser negativo", Alert.AlertType.ERROR);
                 return;
             }
 
-            // ✅ NUEVO: Crear el cliente y asignarle la cuenta según el tipo seleccionado
             Cliente cliente = new Cliente(nombre, cedula);
 
             CuentaBancaria cuenta;
@@ -126,7 +146,6 @@ public class ClienteController {
             cliente.agregarCuenta(cuenta);
             lista.addCliente(cliente);
 
-            // Mostrar mensaje con el número de cuenta generado
             mostrarAlerta("¡Cuenta creada exitosamente!",
                     "Tipo de cuenta: " + tipoCuenta + "\n" +
                             "Número de cuenta: " + cuenta.getNumeroCuenta() + "\n" +
@@ -135,15 +154,13 @@ public class ClienteController {
                             "Saldo inicial: $" + String.format("%.2f", cuenta.getSaldo()),
                     Alert.AlertType.INFORMATION);
 
-            // Limpiar campos
             nombreField.clear();
             cedulaField.clear();
             saldoInicialField.clear();
             tipoCuentaCombo.getSelectionModel().selectFirst();
 
-            // Actualizar la lista visual
-            listaClientes.getItems().clear();
-            listaClientes.getItems().addAll(lista.getClientes());
+            clientesObservable.clear();
+            clientesObservable.addAll(lista.getClientes());
 
         } catch (NumberFormatException e) {
             mostrarAlerta("Error", "El saldo debe ser un valor numérico válido", Alert.AlertType.ERROR);

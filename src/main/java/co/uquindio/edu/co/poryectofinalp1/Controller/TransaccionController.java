@@ -6,12 +6,12 @@ import co.uquindio.edu.co.poryectofinalp1.Model.Transaccion;
 import co.uquindio.edu.co.poryectofinalp1.Repositorio.ListCliente;
 import co.uquindio.edu.co.poryectofinalp1.Repositorio.ListTransaccion;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.io.IOException;
 
@@ -27,21 +27,43 @@ public class TransaccionController {
     private TextField montoField;
 
     @FXML
-    private ListView<Cliente> listaCuentas;
+    private TableView<Cliente> tablaCuentas;
+
+    @FXML
+    private TableColumn<Cliente, String> nombreClienteColumn;
+
+    @FXML
+    private TableColumn<Cliente, String> cedulaClienteColumn;
+
+    @FXML
+    private TableColumn<Cliente, String> numeroCuentaColumn;
+
+    @FXML
+    private TableColumn<Cliente, String> tipoCuentaColumn;
 
     private ListCliente listaClientes;
     private ListTransaccion listaTransacciones;
+    private ObservableList<Cliente> clientesObservable;
 
     public void initialize() {
         listaClientes = ListCliente.getInstance();
         listaTransacciones = ListTransaccion.getInstancia();
+        clientesObservable = FXCollections.observableArrayList(listaClientes.getClientes());
 
-        mostrarCuentas();
+        nombreClienteColumn.setCellValueFactory(new PropertyValueFactory<>("nombre"));
+        cedulaClienteColumn.setCellValueFactory(new PropertyValueFactory<>("cedula"));
+        numeroCuentaColumn.setCellValueFactory(new PropertyValueFactory<>("numeroCuenta"));
+
+        tipoCuentaColumn.setCellValueFactory(cellData -> {
+            Cliente cliente = cellData.getValue();
+            String tipoCuenta = cliente.getCuentaPrincipal() != null ?
+                    cliente.getCuentaPrincipal().getTipoCuenta() : "N/A";
+            return new javafx.beans.property.SimpleStringProperty(tipoCuenta);
+        });
+
+        tablaCuentas.setItems(clientesObservable);
     }
 
-    /**
-     * Valida que los campos necesarios estén completos
-     */
     private boolean validarCamposBasicos() {
         if (cuentaOrigenField.getText().trim().isEmpty()) {
             mostrarAlerta("Error de validación", "La cuenta origen es obligatoria", Alert.AlertType.WARNING);
@@ -54,9 +76,6 @@ public class TransaccionController {
         return true;
     }
 
-    /**
-     * Muestra una alerta al usuario
-     */
     private void mostrarAlerta(String titulo, String mensaje, Alert.AlertType tipo) {
         Alert alerta = new Alert(tipo);
         alerta.setTitle(titulo);
@@ -65,9 +84,6 @@ public class TransaccionController {
         alerta.showAndWait();
     }
 
-    /**
-     * Limpia los campos del formulario
-     */
     private void limpiarCampos() {
         cuentaOrigenField.clear();
         cuentaDestinoField.clear();
@@ -76,9 +92,11 @@ public class TransaccionController {
 
     @FXML
     private void mostrarCuentas() {
-        listaCuentas.setItems(FXCollections.observableArrayList(listaClientes.getClientes()));
-        listaCuentas.setVisible(true);
-        listaCuentas.setManaged(true);
+        clientesObservable.clear();
+        clientesObservable.addAll(listaClientes.getClientes());
+
+        tablaCuentas.setVisible(true);
+        tablaCuentas.setManaged(true);
     }
 
     @FXML
@@ -103,20 +121,21 @@ public class TransaccionController {
                 return;
             }
 
-            // Realizar depósito
             cliente.setSaldo(cliente.getSaldoTotal() + monto);
 
-            // Registrar transacción
             Transaccion transaccion = new Transaccion("DEPOSITO", numeroCuentaOrigen, monto);
             listaTransacciones.addTransaccion(transaccion);
 
             mostrarAlerta("Éxito",
                     "Depósito realizado correctamente\n" +
                             "Cuenta: " + cliente.getNumeroCuenta() + "\n" +
-                            "Titular: " + cliente.getNombre() + "\n" ,
+                            "Titular: " + cliente.getNombre(),
                     Alert.AlertType.INFORMATION);
 
             limpiarCampos();
+            if (tablaCuentas.isVisible()) {
+                tablaCuentas.refresh();
+            }
 
         } catch (NumberFormatException e) {
             mostrarAlerta("Error", "El monto debe ser un valor numérico válido", Alert.AlertType.ERROR);
@@ -153,20 +172,21 @@ public class TransaccionController {
                 return;
             }
 
-            // Realizar retiro
             cliente.setSaldo(cliente.getSaldo() - monto);
 
-            // Registrar transacción
             Transaccion transaccion = new Transaccion("RETIRO", numeroCuentaOrigen, monto);
             listaTransacciones.addTransaccion(transaccion);
 
             mostrarAlerta("Éxito",
                     "Retiro realizado correctamente\n" +
                             "Cuenta: " + cliente.getNumeroCuenta() + "\n" +
-                            "Titular: " + cliente.getNombre() + "\n",
+                            "Titular: " + cliente.getNombre(),
                     Alert.AlertType.INFORMATION);
 
             limpiarCampos();
+            if (tablaCuentas.isVisible()) {
+                tablaCuentas.refresh();
+            }
 
         } catch (NumberFormatException e) {
             mostrarAlerta("Error", "El monto debe ser un valor numérico válido", Alert.AlertType.ERROR);
@@ -220,11 +240,9 @@ public class TransaccionController {
                 return;
             }
 
-            // Realizar transferencia
             clienteOrigen.setSaldo(clienteOrigen.getSaldo() - monto);
             clienteDestino.setSaldo(clienteDestino.getSaldo() + monto);
 
-            // Registrar transacción
             Transaccion transaccion = new Transaccion("TRANSFERENCIA", numeroCuentaOrigen, numeroCuentaDestino, monto);
             listaTransacciones.addTransaccion(transaccion);
 
@@ -238,6 +256,9 @@ public class TransaccionController {
                     Alert.AlertType.INFORMATION);
 
             limpiarCampos();
+            if (tablaCuentas.isVisible()) {
+                tablaCuentas.refresh();
+            }
 
         } catch (NumberFormatException e) {
             mostrarAlerta("Error", "El monto debe ser un valor numérico válido", Alert.AlertType.ERROR);

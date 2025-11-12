@@ -39,7 +39,7 @@
                 </ComboBox>
 
                 <HBox alignment="CENTER" spacing="10">
-                    <Button fx:id="btnCrearCliente" onAction="#onCrearCliente" style="-fx-background-color: #F4D03F; -fx-text-fill: black;" text="Crear Client">
+                    <Button fx:id="btnCrearCliente" onAction="#onCrearCliente" style="-fx-background-color: #F4D03F; -fx-text-fill: black;" text="Crear Cliente">
                         <font>
                             <Font size="14.0" />
                         </font>
@@ -59,7 +59,14 @@
                         <Font size="18.0" />
                     </font>
                 </Label>
-                <ListView fx:id="listaClientes" prefHeight="250.0" style="-fx-pref-width: 500;" />
+                <TableView fx:id="tablaClientes" prefHeight="250.0" style="-fx-pref-width: 500;">
+                    <columns>
+                        <TableColumn fx:id="nombreColumn" text="Nombre" prefWidth="150.0"/>
+                        <TableColumn fx:id="cedulaColumn" text="Cédula" prefWidth="120.0"/>
+                        <TableColumn fx:id="numeroCuentaColumn" text="Nº Cuenta" prefWidth="120.0"/>
+                        <TableColumn fx:id="saldoColumn" text="Saldo" prefWidth="110.0"/>
+                    </columns>
+                </TableView>
             </VBox>
 
             <Button onAction="#volverAlMenu" style="-fx-background-color: #C0392B; -fx-text-fill: white;" text="Volver al Menú Principal">
