@@ -50,10 +50,12 @@ public class TransaccionController {
         listaTransacciones = ListTransaccion.getInstancia();
         clientesObservable = FXCollections.observableArrayList(listaClientes.getClientes());
 
+        // Configurar las columnas de la tabla (SIN columna de saldo)
         nombreClienteColumn.setCellValueFactory(new PropertyValueFactory<>("nombre"));
         cedulaClienteColumn.setCellValueFactory(new PropertyValueFactory<>("cedula"));
         numeroCuentaColumn.setCellValueFactory(new PropertyValueFactory<>("numeroCuenta"));
 
+        // Columna de tipo de cuenta
         tipoCuentaColumn.setCellValueFactory(cellData -> {
             Cliente cliente = cellData.getValue();
             String tipoCuenta = cliente.getCuentaPrincipal() != null ?
@@ -64,6 +66,9 @@ public class TransaccionController {
         tablaCuentas.setItems(clientesObservable);
     }
 
+    /**
+     * Valida que los campos necesarios estén completos
+     */
     private boolean validarCamposBasicos() {
         if (cuentaOrigenField.getText().trim().isEmpty()) {
             mostrarAlerta("Error de validación", "La cuenta origen es obligatoria", Alert.AlertType.WARNING);
@@ -76,6 +81,9 @@ public class TransaccionController {
         return true;
     }
 
+    /**
+     * Muestra una alerta al usuario
+     */
     private void mostrarAlerta(String titulo, String mensaje, Alert.AlertType tipo) {
         Alert alerta = new Alert(tipo);
         alerta.setTitle(titulo);
@@ -84,6 +92,9 @@ public class TransaccionController {
         alerta.showAndWait();
     }
 
+    /**
+     * Limpia los campos del formulario
+     */
     private void limpiarCampos() {
         cuentaOrigenField.clear();
         cuentaDestinoField.clear();
@@ -92,6 +103,7 @@ public class TransaccionController {
 
     @FXML
     private void mostrarCuentas() {
+        // Actualizar la lista de clientes
         clientesObservable.clear();
         clientesObservable.addAll(listaClientes.getClientes());
 
@@ -121,8 +133,10 @@ public class TransaccionController {
                 return;
             }
 
+            // Realizar depósito
             cliente.setSaldo(cliente.getSaldoTotal() + monto);
 
+            // Registrar transacción
             Transaccion transaccion = new Transaccion("DEPOSITO", numeroCuentaOrigen, monto);
             listaTransacciones.addTransaccion(transaccion);
 
@@ -133,6 +147,7 @@ public class TransaccionController {
                     Alert.AlertType.INFORMATION);
 
             limpiarCampos();
+            // Actualizar la tabla si está visible
             if (tablaCuentas.isVisible()) {
                 tablaCuentas.refresh();
             }
@@ -172,8 +187,10 @@ public class TransaccionController {
                 return;
             }
 
+            // Realizar retiro
             cliente.setSaldo(cliente.getSaldo() - monto);
 
+            // Registrar transacción
             Transaccion transaccion = new Transaccion("RETIRO", numeroCuentaOrigen, monto);
             listaTransacciones.addTransaccion(transaccion);
 
@@ -184,6 +201,7 @@ public class TransaccionController {
                     Alert.AlertType.INFORMATION);
 
             limpiarCampos();
+            // Actualizar la tabla si está visible
             if (tablaCuentas.isVisible()) {
                 tablaCuentas.refresh();
             }
@@ -240,9 +258,11 @@ public class TransaccionController {
                 return;
             }
 
+            // Realizar transferencia
             clienteOrigen.setSaldo(clienteOrigen.getSaldo() - monto);
             clienteDestino.setSaldo(clienteDestino.getSaldo() + monto);
 
+            // Registrar transacción
             Transaccion transaccion = new Transaccion("TRANSFERENCIA", numeroCuentaOrigen, numeroCuentaDestino, monto);
             listaTransacciones.addTransaccion(transaccion);
 
@@ -256,6 +276,7 @@ public class TransaccionController {
                     Alert.AlertType.INFORMATION);
 
             limpiarCampos();
+            // Actualizar la tabla si está visible
             if (tablaCuentas.isVisible()) {
                 tablaCuentas.refresh();
             }

@@ -43,7 +43,7 @@
                 </effect>
             </Button>
 
-            <!-- Este botón solo lo verán los ADMIN -->
+            <!-- Este botón solo lo verán ADMIN y CAJERO -->
             <Button fx:id="btnCrearCuenta" onAction="#onCrearCliente" prefHeight="52.0" prefWidth="210.0" style="-fx-background-color: #F4D03F; -fx-text-fill: black;" text="Crear Cliente">
                 <font>
                     <Font size="20.0" />
@@ -53,8 +53,18 @@
                 </effect>
             </Button>
 
-            <!-- Este botón lo ven ADMIN y CLIENTE -->
+            <!-- Este botón lo ven todos -->
             <Button fx:id="btnTransferencia" onAction="#onAbrirTransferencia" prefHeight="52.0" prefWidth="210.0" style="-fx-background-color: #28B463; -fx-text-fill: white;" text="Transacciones">
+                <font>
+                    <Font size="20.0" />
+                </font>
+                <effect>
+                    <DropShadow />
+                </effect>
+            </Button>
+
+            <!-- NUEVO: Botón de Reportes (visible para ADMIN y CAJERO) -->
+            <Button fx:id="btnReportes" onAction="#onAbrirReportes" prefHeight="52.0" prefWidth="210.0" style="-fx-background-color: #9B59B6; -fx-text-fill: white;" text="📊 Reportes">
                 <font>
                     <Font size="20.0" />
                 </font>

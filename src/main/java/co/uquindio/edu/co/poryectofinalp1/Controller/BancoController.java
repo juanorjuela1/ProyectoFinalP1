@@ -26,6 +26,9 @@ public class BancoController {
         private Button btnTransferencia;
 
         @FXML
+        private Button btnReportes;
+
+        @FXML
         private Button btnCerrarSesion;
 
         @FXML
@@ -58,6 +61,8 @@ public class BancoController {
                                 btnCrearCuenta.setManaged(false);
                                 btnTransferencia.setVisible(true);
                                 btnTransferencia.setManaged(true);
+                                btnReportes.setVisible(false);
+                                btnReportes.setManaged(false);
                         } else if (sesion.esAdmin()) {
                                 // Los admins ven todas las funciones
                                 System.out.println("Configurando vista de ADMIN");
@@ -67,8 +72,10 @@ public class BancoController {
                                 btnCrearCuenta.setManaged(true);
                                 btnTransferencia.setVisible(true);
                                 btnTransferencia.setManaged(true);
+                                btnReportes.setVisible(true);
+                                btnReportes.setManaged(true);
                         } else if (sesion.esCajero()) {
-                                // Los cajeros solo ven Crear Cuenta y Transacciones
+                                // Los cajeros ven Crear Cuenta, Transacciones y Reportes
                                 System.out.println("Configurando vista de CAJERO");
                                 btnAcceder.setVisible(false);
                                 btnAcceder.setManaged(false);
@@ -76,6 +83,8 @@ public class BancoController {
                                 btnCrearCuenta.setManaged(true);
                                 btnTransferencia.setVisible(true);
                                 btnTransferencia.setManaged(true);
+                                btnReportes.setVisible(true);
+                                btnReportes.setManaged(true);
                         }
                 }
         }
@@ -111,6 +120,18 @@ public class BancoController {
                         FXMLLoader loader = new FXMLLoader(HelloApplication.class.getResource("/co/uquindio/edu/co/poryectofinalp1/ClienteView.fxml"));
                         clienteView = loader.load();
                         HelloApplication.getPrimaryStage().getScene().setRoot(clienteView);
+                } catch (IOException e) {
+                        e.printStackTrace();
+                }
+        }
+
+        @FXML
+        void onAbrirReportes(ActionEvent event) {
+                try {
+                        Parent reporteView;
+                        FXMLLoader loader = new FXMLLoader(HelloApplication.class.getResource("/co/uquindio/edu/co/poryectofinalp1/ReporteView.fxml"));
+                        reporteView = loader.load();
+                        HelloApplication.getPrimaryStage().getScene().setRoot(reporteView);
                 } catch (IOException e) {
                         e.printStackTrace();
                 }
