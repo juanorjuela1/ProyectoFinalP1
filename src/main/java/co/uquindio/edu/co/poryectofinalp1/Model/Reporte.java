@@ -38,7 +38,7 @@ public class Reporte {
 
         StringBuilder reporte = new StringBuilder();
         reporte.append("╔════════════════════════════════════════════════════════╗\n");
-        reporte.append("║       REPORTE GENERAL DE TRANSACCIONES                ║\n");
+        reporte.append("║       REPORTE GENERAL DE TRANSACCIONES                 ║\n");
         reporte.append("╚════════════════════════════════════════════════════════╝\n\n");
         reporte.append(String.format("Fecha de generación: %s\n",
                 LocalDateTime.now().format(formatter)));
