@@ -12,6 +12,34 @@ public class ListEmpleado {
 
     private ListEmpleado() {
         empleados = new ArrayList<Empleado>();
+        inicializarDatosPrueba();
+    }
+
+    /**
+     * Inicializa empleados de prueba
+     */
+    private void inicializarDatosPrueba() {
+        // Empleado 1 - Gerente
+        Empleado emp1 = new Empleado("Pedro Sánchez", "1111111111", 4500000.0);
+        this.empleados.add(emp1);
+
+        // Empleado 2 - Cajero
+        Empleado emp2 = new Empleado("Laura Gómez", "2222222222", 2500000.0);
+        this.empleados.add(emp2);
+
+        // Empleado 3 - Asesor
+        Empleado emp3 = new Empleado("Miguel Ángel Torres", "3333333333", 3000000.0);
+        this.empleados.add(emp3);
+
+        // Empleado 4 - Cajera
+        Empleado emp4 = new Empleado("Sofia Ramírez", "4444444444", 2500000.0);
+        this.empleados.add(emp4);
+
+        // Empleado 5 - Contador
+        Empleado emp5 = new Empleado("Roberto Díaz", "5555555555", 3500000.0);
+        this.empleados.add(emp5);
+
+        System.out.println("✅ Se han cargado " + this.empleados.size() + " empleados de prueba");
     }
 
     /**
@@ -33,7 +61,7 @@ public class ListEmpleado {
         this.empleados.add(empleado);
     }
 
-    public void removeEmpleado(Empleado empleado) {
+    public void removeEmpleado(Empleado empleado)    {
         this.empleados.remove(empleado);
     }
 
